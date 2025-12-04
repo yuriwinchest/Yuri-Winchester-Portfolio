@@ -5,11 +5,11 @@ import { Project } from '../types';
 const Admin: React.FC = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [password, setPassword] = useState('');
-  
+
   const [projects, setProjects] = useState<Project[]>([]);
   const [messages, setMessages] = useState<any[]>([]);
   const [profilePhotoUrl, setProfilePhotoUrl] = useState('');
-  
+
   const [newProject, setNewProject] = useState<Partial<Project>>({
     title: '', description: '', image: '', live_link: '', details_link: ''
   });
@@ -25,11 +25,11 @@ const Admin: React.FC = () => {
   const fetchData = async () => {
     setLoading(true);
     // 1. Projects
-    const { data: proj } = await supabase.from('projects').select('*').order('id', {ascending: true});
+    const { data: proj } = await supabase.from('projects').select('*').order('id', { ascending: true });
     if (proj) setProjects(proj);
-    
+
     // 2. Messages
-    const { data: msg } = await supabase.from('messages').select('*').order('created_at', {ascending: false});
+    const { data: msg } = await supabase.from('messages').select('*').order('created_at', { ascending: false });
     if (msg) setMessages(msg);
 
     // 3. Settings (Photo)
@@ -42,7 +42,7 @@ const Admin: React.FC = () => {
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
     // Simple client-side check for demonstration. Real apps should use Supabase Auth.
-    if (password === '1234') { 
+    if (password === '1234') {
       setIsAuthenticated(true);
     } else {
       alert('Senha incorreta');
@@ -53,7 +53,7 @@ const Admin: React.FC = () => {
     const { error } = await supabase
       .from('site_settings')
       .upsert({ key: 'profile_image', value: profilePhotoUrl });
-    
+
     if (!error) alert('Foto de perfil atualizada!');
     else alert('Erro ao atualizar foto');
   };
@@ -69,7 +69,7 @@ const Admin: React.FC = () => {
   };
 
   const handleDeleteProject = async (id: number) => {
-    if(!window.confirm("Tem certeza que deseja excluir este projeto?")) return;
+    if (!window.confirm("Tem certeza que deseja excluir este projeto?")) return;
     const { error } = await supabase.from('projects').delete().eq('id', id);
     if (!error) fetchData();
   };
@@ -79,11 +79,11 @@ const Admin: React.FC = () => {
       <div className="flex h-screen items-center justify-center bg-gray-100">
         <form onSubmit={handleLogin} className="bg-white p-8 rounded shadow-md w-full max-w-sm">
           <h2 className="text-xl mb-4 font-bold text-center">Login Administrativo</h2>
-          <input 
-            type="password" 
-            value={password} 
-            onChange={e => setPassword(e.target.value)} 
-            className="border p-2 w-full mb-4 rounded" 
+          <input
+            type="password"
+            value={password}
+            onChange={e => setPassword(e.target.value)}
+            className="border p-2 w-full mb-4 rounded"
             placeholder="Digite o PIN (1234)"
           />
           <button className="bg-blue-600 text-white w-full py-2 rounded hover:bg-blue-700 transition">Entrar</button>
@@ -96,55 +96,59 @@ const Admin: React.FC = () => {
     <div className="min-h-screen bg-gray-50 p-4 md:p-8 font-sans">
       <div className="max-w-6xl mx-auto">
         <div className="flex justify-between items-center mb-8">
-            <h1 className="text-3xl font-bold text-gray-800">Painel Administrativo</h1>
-            <button onClick={() => setIsAuthenticated(false)} className="text-sm text-red-600 hover:underline">Sair</button>
+          <h1 className="text-3xl font-bold text-gray-800">Painel Administrativo</h1>
+          <button onClick={() => setIsAuthenticated(false)} className="text-sm text-red-600 hover:underline">Sair</button>
         </div>
 
         {loading && <div className="mb-4 text-blue-600 font-semibold animate-pulse">Carregando dados...</div>}
 
-        {/* --- Profile Photo Section --- */}`n        <PhotoUpload `n          currentPhotoUrl={profilePhotoUrl}`n          onPhotoUpdated={(newUrl) => setProfilePhotoUrl(newUrl)}`n        />
+        {/* --- Profile Photo Section --- */}
+        <PhotoUpload
+          currentPhotoUrl={profilePhotoUrl}
+          onPhotoUpdated={(newUrl) => setProfilePhotoUrl(newUrl)}
+        />
 
         {/* --- Projects Section --- */}
         <section className="bg-white p-6 rounded-lg shadow mb-8">
           <h2 className="text-xl font-bold mb-4 text-gray-800">Gerenciar Projetos</h2>
-          
+
           {/* Add New */}
           <div className="bg-gray-50 p-4 rounded mb-6 border border-gray-200">
             <h3 className="font-semibold mb-2 text-gray-700">Adicionar Novo Projeto</h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <input 
-                placeholder="Título do Projeto" 
-                className="border p-2 rounded" 
-                value={newProject.title} 
-                onChange={e => setNewProject({...newProject, title: e.target.value})} 
+              <input
+                placeholder="Título do Projeto"
+                className="border p-2 rounded"
+                value={newProject.title}
+                onChange={e => setNewProject({ ...newProject, title: e.target.value })}
               />
-              <input 
-                placeholder="URL da Imagem (Capa)" 
-                className="border p-2 rounded" 
-                value={newProject.image} 
-                onChange={e => setNewProject({...newProject, image: e.target.value})} 
+              <input
+                placeholder="URL da Imagem (Capa)"
+                className="border p-2 rounded"
+                value={newProject.image}
+                onChange={e => setNewProject({ ...newProject, image: e.target.value })}
               />
-              <input 
-                placeholder="Link da Demo (Botão Demo)" 
-                className="border p-2 rounded" 
-                value={newProject.live_link} 
-                onChange={e => setNewProject({...newProject, live_link: e.target.value})} 
+              <input
+                placeholder="Link da Demo (Botão Demo)"
+                className="border p-2 rounded"
+                value={newProject.live_link}
+                onChange={e => setNewProject({ ...newProject, live_link: e.target.value })}
               />
-               <input 
-                placeholder="Link de Detalhes (Botão Ver Detalhes)" 
-                className="border p-2 rounded" 
-                value={newProject.details_link} 
-                onChange={e => setNewProject({...newProject, details_link: e.target.value})} 
+              <input
+                placeholder="Link de Detalhes (Botão Ver Detalhes)"
+                className="border p-2 rounded"
+                value={newProject.details_link}
+                onChange={e => setNewProject({ ...newProject, details_link: e.target.value })}
               />
-              <textarea 
-                placeholder="Descrição do projeto..." 
-                className="border p-2 rounded md:col-span-2 h-24" 
-                value={newProject.description} 
-                onChange={e => setNewProject({...newProject, description: e.target.value})} 
+              <textarea
+                placeholder="Descrição do projeto..."
+                className="border p-2 rounded md:col-span-2 h-24"
+                value={newProject.description}
+                onChange={e => setNewProject({ ...newProject, description: e.target.value })}
               />
             </div>
             <button onClick={handleAddProject} className="bg-green-600 text-white px-6 py-2 rounded mt-4 hover:bg-green-700 transition">
-                + Adicionar Projeto
+              + Adicionar Projeto
             </button>
           </div>
 
@@ -162,8 +166,8 @@ const Admin: React.FC = () => {
                 {projects.map(p => (
                   <tr key={p.id}>
                     <td className="px-6 py-4">
-                        <div className="text-sm font-medium text-gray-900">{p.title}</div>
-                        <div className="text-sm text-gray-500 truncate max-w-xs">{p.description}</div>
+                      <div className="text-sm font-medium text-gray-900">{p.title}</div>
+                      <div className="text-sm text-gray-500 truncate max-w-xs">{p.description}</div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 flex flex-col gap-1">
                       {p.live_link && <a href={p.live_link} target="_blank" rel="noreferrer" className="text-blue-500 hover:underline">Demo</a>}
@@ -192,7 +196,7 @@ const Admin: React.FC = () => {
                 </div>
                 <p className="text-sm text-blue-600 mb-2">{msg.email}</p>
                 <div className="bg-gray-100 p-3 rounded text-gray-700 whitespace-pre-wrap">
-                    {msg.message}
+                  {msg.message}
                 </div>
               </div>
             ))}
