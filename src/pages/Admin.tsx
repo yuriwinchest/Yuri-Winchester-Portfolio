@@ -186,18 +186,64 @@ const Admin: React.FC = () => {
 
         {/* --- Messages Section --- */}
         <section className="bg-white p-6 rounded-lg shadow">
-          <h2 className="text-xl font-bold mb-4 text-gray-800">Mensagens Recebidas</h2>
+          <div className="flex justify-between items-center mb-4">
+            <h2 className="text-xl font-bold text-gray-800">📬 Mensagens Recebidas</h2>
+            <span className="bg-blue-500 text-white px-3 py-1 rounded-full text-sm font-semibold">
+              {messages.length} {messages.length === 1 ? 'mensagem' : 'mensagens'}
+            </span>
+          </div>
+
           <div className="space-y-4">
-            {messages.length === 0 && <p className="text-gray-500 italic">Nenhuma mensagem recebida ainda.</p>}
+            {messages.length === 0 && (
+              <div className="text-center py-12">
+                <span className="text-6xl mb-4 block">📭</span>
+                <p className="text-gray-500 italic">Nenhuma mensagem recebida ainda.</p>
+              </div>
+            )}
+
             {messages.map(msg => (
-              <div key={msg.id} className="border-b pb-4 hover:bg-gray-50 p-2 rounded transition">
-                <div className="flex flex-col sm:flex-row justify-between mb-1">
-                  <span className="font-bold text-gray-900">{msg.name}</span>
-                  <span className="text-sm text-gray-500">{new Date(msg.created_at).toLocaleDateString('pt-BR')} às {new Date(msg.created_at).toLocaleTimeString('pt-BR')}</span>
+              <div key={msg.id} className="border-l-4 border-blue-500 bg-gray-50 p-4 rounded-r-lg hover:shadow-md transition">
+                <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-2">
+                  <div className="flex items-center gap-2">
+                    <span className="material-icons-outlined text-blue-500">person</span>
+                    <span className="font-bold text-gray-900">{msg.name}</span>
+                  </div>
+                  <span className="text-xs text-gray-500 mt-1 sm:mt-0">
+                    {new Date(msg.created_at).toLocaleDateString('pt-BR')} às {new Date(msg.created_at).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}
+                  </span>
                 </div>
-                <p className="text-sm text-blue-600 mb-2">{msg.email}</p>
-                <div className="bg-gray-100 p-3 rounded text-gray-700 whitespace-pre-wrap">
+
+                <div className="flex items-center gap-2 mb-3">
+                  <span className="material-icons-outlined text-sm text-gray-400">email</span>
+                  <a href={`mailto:${msg.email}`} className="text-sm text-blue-600 hover:underline">
+                    {msg.email}
+                  </a>
+                </div>
+
+                <div className="bg-white p-4 rounded border border-gray-200 text-gray-700 whitespace-pre-wrap mb-3">
                   {msg.message}
+                </div>
+
+                <div className="flex gap-2">
+                  <a
+                    href={`mailto:${msg.email}?subject=Re: Contato via Portfolio`}
+                    className="flex items-center gap-1 text-sm bg-blue-500 text-white px-3 py-1.5 rounded hover:bg-blue-600 transition"
+                  >
+                    <span className="material-icons-outlined text-sm">reply</span>
+                    Responder
+                  </a>
+                  <button
+                    onClick={async () => {
+                      if (window.confirm('Deseja deletar esta mensagem?')) {
+                        await supabase.from('messages').delete().eq('id', msg.id);
+                        fetchData();
+                      }
+                    }}
+                    className="flex items-center gap-1 text-sm bg-red-500 text-white px-3 py-1.5 rounded hover:bg-red-600 transition"
+                  >
+                    <span className="material-icons-outlined text-sm">delete</span>
+                    Deletar
+                  </button>
                 </div>
               </div>
             ))}
