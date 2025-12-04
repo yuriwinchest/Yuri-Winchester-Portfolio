@@ -1,9 +1,25 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 interface FooterProps {
   primaryColor: string;
   isDark?: boolean;
 }
+
+const SocialLink: React.FC<{ href: string; children: React.ReactNode; primaryColor: string; textColor: string }> = ({ href, children, primaryColor, textColor }) => {
+  const [isHovered, setIsHovered] = useState(false);
+  
+  return (
+    <a 
+      href={href} 
+      className={`${textColor} transition-colors`}
+      style={{ color: isHovered ? primaryColor : undefined }}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+    >
+      {children}
+    </a>
+  );
+};
 
 const Footer: React.FC<FooterProps> = ({ primaryColor, isDark = false }) => {
   const textColor = isDark ? 'text-zinc-400' : 'text-zinc-500';
@@ -14,16 +30,9 @@ const Footer: React.FC<FooterProps> = ({ primaryColor, isDark = false }) => {
       <div className={`border-t ${borderColor} pt-6 flex flex-col sm:flex-row justify-between items-center gap-4`}>
         <p className={`text-sm ${textColor}`}>© 2024 Yuri Winchester. Todos os direitos reservados.</p>
         <div className="flex space-x-4">
-          {['GitHub', 'LinkedIn', 'Twitter'].map((social) => (
-            <a 
-              key={social} 
-              href="#" 
-              className={`${textColor} transition-colors hover:opacity-100`}
-              style={{ ':hover': { color: primaryColor } } as any}
-            >
-              {social}
-            </a>
-          ))}
+          <SocialLink href="#" primaryColor={primaryColor} textColor={textColor}>GitHub</SocialLink>
+          <SocialLink href="#" primaryColor={primaryColor} textColor={textColor}>LinkedIn</SocialLink>
+          <SocialLink href="#" primaryColor={primaryColor} textColor={textColor}>Twitter</SocialLink>
         </div>
       </div>
     </footer>

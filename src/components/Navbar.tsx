@@ -9,9 +9,8 @@ interface NavbarProps {
 const Navbar: React.FC<NavbarProps> = ({ primaryColor, isDark = false }) => {
   const [isOpen, setIsOpen] = useState(false);
 
-  const activeClass = `text-${primaryColor} font-semibold`; // Dynamically use primary color class may not work with JIT if not safe-listed, but assume standard colors or style attribute.
+  // Variáveis removidas para evitar erros de linting (no-unused-vars)
   const textColor = isDark ? 'text-zinc-200' : 'text-zinc-600';
-  const hoverColor = isDark ? 'hover:text-white' : 'hover:text-black';
   const headingColor = isDark ? 'text-white' : 'text-zinc-900';
 
   const navLinks = [
