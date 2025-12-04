@@ -60,12 +60,40 @@ const Admin: React.FC = () => {
   };
 
   const handleAddProject = async () => {
-    if (!newProject.title) return;
-    const { error } = await supabase.from('projects').insert([newProject]);
-    if (!error) {
-      alert('Projeto adicionado!');
+    console.log('🎨 Tentando adicionar projeto:', newProject);
+
+    if (!newProject.title) {
+      alert('❌ Título é obrigatório!');
+      return;
+    }
+
+    if (!newProject.description) {
+      alert('❌ Descrição é obrigatória!');
+      return;
+    }
+
+    if (!newProject.image) {
+      alert('❌ URL da imagem é obrigatória!');
+      return;
+    }
+
+    try {
+      const { data, error } = await supabase.from('projects').insert([newProject]).select();
+
+      console.log('📊 Resposta do Supabase:', { data, error });
+
+      if (error) {
+        console.error('❌ Erro ao adicionar:', error);
+        alert(`❌ Erro: ${error.message}`);
+        return;
+      }
+
+      alert('✅ Projeto adicionado com sucesso!');
       setNewProject({ title: '', description: '', image: '', live_link: '', details_link: '' });
       fetchData();
+    } catch (err: any) {
+      console.error('❌ Erro completo:', err);
+      alert(`❌ Erro: ${err.message}`);
     }
   };
 
