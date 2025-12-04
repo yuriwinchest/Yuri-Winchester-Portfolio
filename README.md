@@ -1,11 +1,23 @@
-<div align="center">
+# Yuri Winchester Portfolio
 
-<img width="1200" height="475" alt="GHBanner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
+A modern portfolio website built with React, Tailwind CSS, and TypeScript.
 
-  <h1>Built with AI Studio</h2>
+## Setup
 
-  <p>The fastest path from prompt to production with Gemini.</p>
+1.  **Install Dependencies**: `npm install`
+2.  **Run Locally**: `npm start`
 
-  <a href="https://aistudio.google.com/apps">Start building</a>
+## Database (Supabase)
 
-</div>
+The project includes a `supabase_schema.sql` file containing the SQL commands to create the necessary tables (`projects`, `skills`, `messages`) and insert sample data.
+
+1.  Go to your Supabase project dashboard.
+2.  Open the SQL Editor.
+3.  Copy the content of `supabase_schema.sql` and run it.
+
+## Deployment (Vercel)
+
+1.  Push this code to a GitHub repository.
+2.  Import the repository into Vercel.
+3.  Vercel will automatically detect the Create React App framework and deploy it.
+4.  The `vercel.json` file handles SPA routing (rewrites to `index.html`).
