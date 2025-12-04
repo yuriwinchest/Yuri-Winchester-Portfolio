@@ -15,6 +15,9 @@ const Admin: React.FC = () => {
     title: '', description: '', image: '', live_link: '', details_link: ''
   });
 
+  const [projectImageFile, setProjectImageFile] = useState<File | null>(null);
+  const [uploadingProjectImage, setUploadingProjectImage] = useState(false);
+
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
@@ -59,6 +62,51 @@ const Admin: React.FC = () => {
     else alert('Erro ao atualizar foto');
   };
 
+  const handleUploadProjectImage = async () => {
+    if (!projectImageFile) {
+      alert('❌ Selecione uma imagem primeiro!');
+      return null;
+    }
+
+    setUploadingProjectImage(true);
+    try {
+      const fileName = `project-${Date.now()}.${projectImageFile.name.split('.').pop()}`;
+
+      // Tentar criar o bucket primeiro
+      try {
+        await supabase.storage.createBucket('project-images', {
+          public: true,
+          fileSizeLimit: 10485760 // 10MB
+        });
+      } catch (bucketError) {
+        console.log('Bucket já existe:', bucketError);
+      }
+
+      // Upload da imagem
+      const { error: uploadError } = await supabase.storage
+        .from('project-images')
+        .upload(fileName, projectImageFile, {
+          cacheControl: '3600',
+          upsert: false
+        });
+
+      if (uploadError) throw uploadError;
+
+      // Pegar URL pública
+      const { data: urlData } = supabase.storage
+        .from('project-images')
+        .getPublicUrl(fileName);
+
+      setUploadingProjectImage(false);
+      return urlData.publicUrl;
+    } catch (error: any) {
+      console.error('❌ Erro ao fazer upload:', error);
+      alert(`❌ Erro ao fazer upload: ${error.message}`);
+      setUploadingProjectImage(false);
+      return null;
+    }
+  };
+
   const handleAddProject = async () => {
     console.log('🎨 Tentando adicionar projeto:', newProject);
 
@@ -72,13 +120,30 @@ const Admin: React.FC = () => {
       return;
     }
 
-    if (!newProject.image) {
-      alert('❌ URL da imagem é obrigatória!');
+    // Se houver arquivo selecionado, fazer upload primeiro
+    let imageUrl = newProject.image;
+    if (projectImageFile) {
+      console.log('📤 Fazendo upload da imagem...');
+      const uploadedUrl = await handleUploadProjectImage();
+      if (!uploadedUrl) {
+        alert('❌ Erro ao fazer upload da imagem. Tente novamente.');
+        return;
+      }
+      imageUrl = uploadedUrl;
+    }
+
+    if (!imageUrl) {
+      alert('❌ Imagem é obrigatória! Selecione um arquivo ou cole uma URL.');
       return;
     }
 
     try {
-      const { data, error } = await supabase.from('projects').insert([newProject]).select();
+      const projectData = {
+        ...newProject,
+        image: imageUrl
+      };
+
+      const { data, error } = await supabase.from('projects').insert([projectData]).select();
 
       console.log('📊 Resposta do Supabase:', { data, error });
 
@@ -90,6 +155,7 @@ const Admin: React.FC = () => {
 
       alert('✅ Projeto adicionado com sucesso!');
       setNewProject({ title: '', description: '', image: '', live_link: '', details_link: '' });
+      setProjectImageFile(null);
       fetchData();
     } catch (err: any) {
       console.error('❌ Erro completo:', err);
@@ -166,14 +232,41 @@ const Admin: React.FC = () => {
                 />
               </div>
 
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">URL da Imagem (Capa) *</label>
-                <input
-                  placeholder="https://exemplo.com/imagem.jpg"
-                  className="border-2 border-gray-300 p-3 rounded-lg w-full focus:border-purple-500 focus:ring-2 focus:ring-purple-200 transition-all"
-                  value={newProject.image}
-                  onChange={e => setNewProject({ ...newProject, image: e.target.value })}
-                />
+              <div className="md:col-span-2">
+                <label className="block text-sm font-medium text-gray-700 mb-2">Imagem do Projeto (Capa) *</label>
+
+                {/* Opção 1: Upload de Arquivo */}
+                <div className="mb-3 p-3 bg-blue-50 rounded-lg border border-blue-200">
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">📁 Opção 1: Enviar do Computador</label>
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={(e) => {
+                      if (e.target.files && e.target.files[0]) {
+                        setProjectImageFile(e.target.files[0]);
+                        setNewProject({ ...newProject, image: '' }); // Limpar URL se selecionar arquivo
+                      }
+                    }}
+                    className="w-full p-2 border border-gray-300 rounded-md text-sm"
+                  />
+                  {projectImageFile && (
+                    <p className="text-sm text-green-600 mt-1">✅ {projectImageFile.name}</p>
+                  )}
+                </div>
+
+                {/* Opção 2: URL */}
+                <div className="p-3 bg-gray-50 rounded-lg border border-gray-200">
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">🔗 Opção 2: Usar URL de Imagem</label>
+                  <input
+                    placeholder="https://exemplo.com/imagem.jpg"
+                    className="border-2 border-gray-300 p-3 rounded-lg w-full focus:border-purple-500 focus:ring-2 focus:ring-purple-200 transition-all"
+                    value={newProject.image}
+                    onChange={(e) => {
+                      setNewProject({ ...newProject, image: e.target.value });
+                      setProjectImageFile(null); // Limpar arquivo se digitar URL
+                    }}
+                  />
+                </div>
               </div>
 
               <div>
@@ -207,11 +300,11 @@ const Admin: React.FC = () => {
               </div>
 
               {/* Preview da Imagem */}
-              {newProject.image && (
+              {(newProject.image || projectImageFile) && (
                 <div className="md:col-span-2">
                   <label className="block text-sm font-medium text-gray-700 mb-2">Preview da Imagem:</label>
                   <img
-                    src={newProject.image}
+                    src={projectImageFile ? URL.createObjectURL(projectImageFile) : newProject.image}
                     alt="Preview"
                     className="w-full max-w-md h-48 object-cover rounded-lg border-2 border-gray-300"
                     onError={(e) => {
