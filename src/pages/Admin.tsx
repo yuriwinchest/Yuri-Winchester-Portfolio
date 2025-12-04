@@ -70,21 +70,11 @@ const Admin: React.FC = () => {
 
     setUploadingProjectImage(true);
     try {
-      const fileName = `project-${Date.now()}.${projectImageFile.name.split('.').pop()}`;
+      const fileName = `projects/project-${Date.now()}.${projectImageFile.name.split('.').pop()}`;
 
-      // Tentar criar o bucket primeiro
-      try {
-        await supabase.storage.createBucket('project-images', {
-          public: true,
-          fileSizeLimit: 10485760 // 10MB
-        });
-      } catch (bucketError) {
-        console.log('Bucket já existe:', bucketError);
-      }
-
-      // Upload da imagem
+      // Upload da imagem no bucket 'documents'
       const { error: uploadError } = await supabase.storage
-        .from('project-images')
+        .from('documents')
         .upload(fileName, projectImageFile, {
           cacheControl: '3600',
           upsert: false
@@ -94,7 +84,7 @@ const Admin: React.FC = () => {
 
       // Pegar URL pública
       const { data: urlData } = supabase.storage
-        .from('project-images')
+        .from('documents')
         .getPublicUrl(fileName);
 
       setUploadingProjectImage(false);
