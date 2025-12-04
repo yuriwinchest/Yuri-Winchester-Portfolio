@@ -114,6 +114,8 @@ const Admin: React.FC = () => {
             onChange={e => setPassword(e.target.value)}
             className="border p-2 w-full mb-4 rounded"
             placeholder="Digite o PIN (1234)"
+            autoComplete="current-password"
+            aria-label="Senha de acesso"
           />
           <button className="bg-blue-600 text-white w-full py-2 rounded hover:bg-blue-700 transition">Entrar</button>
         </form>
