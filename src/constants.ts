@@ -11,7 +11,7 @@ export const CONTACT_INFO = {
 // Imagens padrão (Fallback)
 export const IMAGES = {
   // O app tentará carregar do Supabase 'site_settings' primeiro.
-  PROFILE: "https://placehold.co/600x600?text=Upload+Photo+in+Admin",
+  PROFILE: "https://placehold.co/600x600?text=Envie+Foto+no+Admin",
   PROJECT_MGMT: "https://lh3.googleusercontent.com/aida-public/AB6AXuDN3K9ysprlTutLAjFc6dzDwfEGk7mtcpr1yS5aF54hOHos-_W1uLIm5iXoQmdZN8qH7uQD1OjCVj23OGZ6cnOtG7dAfBE5VdzjR-8LggemlG2C9uKAMKUPsf-U5oik_4JZI1szVVdYm6bi7VNUzry2LjCgW9qLyOUqoQZFg8-rS3FQ5cRWjXg-PSlfI5t5jzkrc-trinhFKU4C2_4FwuHk8J-PuGlexhtFfBFbSqZu4xKwiayE0R-eB60_7wXcp5vW-7SAg0sbKNI",
   ECOMMERCE: "https://lh3.googleusercontent.com/aida-public/AB6AXuC6YH7-2YKDcekIPpoZcVVmpq4nIz3oH1ZFucIqU4iFBKg57hmoyoqRZByfJOYifp93ckzd7bMr985ApHSIkfZ7unI4ae3pzxF-AI4O5ASvycilyTg1dQkm8qVOqhCAoPAGsAea2aOxiyyETtE66Iv-m14uKCao8OlNLYociuI2JFr41XpD8ghsR_7pW34O4c3rlwHMb_pYcU5xTjv_m_M3xFBeLbEDv473wreypZrZmMqqWI8l6xpPZeaLs3ElJgQ4Zwp275h99Kc",
   WEATHER: "https://lh3.googleusercontent.com/aida-public/AB6AXuCz9rmHErTwc0m4deA2oBSiOhbcoXgc14aaf4IIDcVuXa4l1OXYJ1uBRtw2n8vBuz9StZXp0T2FGskVcRYoKVkHJSAV6kwvqNIJR8l6BN6VR_2itvNIJmjMugaNobvpWBem_7OQSwyLt2Es1vlwnrrZW12_mHdpbhrsnoPqk5Fr9bpnIUo7k5RHz3csrCBUxlR1_lHDxwMum7RtWjYjciWzMstYlx7Lkn9YGtsyCm5h2gk8zB00ukTRLn6BWd6VwWNMgDJLh3Txlbw",
