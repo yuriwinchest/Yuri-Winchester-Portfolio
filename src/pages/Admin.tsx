@@ -111,76 +111,166 @@ const Admin: React.FC = () => {
 
         {/* --- Projects Section --- */}
         <section className="bg-white p-6 rounded-lg shadow mb-8">
-          <h2 className="text-xl font-bold mb-4 text-gray-800">Gerenciar Projetos</h2>
+          <div className="flex justify-between items-center mb-6">
+            <h2 className="text-xl font-bold text-gray-800">🎨 Gerenciar Projetos</h2>
+            <span className="bg-purple-500 text-white px-3 py-1 rounded-full text-sm font-semibold">
+              {projects.length} {projects.length === 1 ? 'projeto' : 'projetos'}
+            </span>
+          </div>
 
-          {/* Add New */}
-          <div className="bg-gray-50 p-4 rounded mb-6 border border-gray-200">
-            <h3 className="font-semibold mb-2 text-gray-700">Adicionar Novo Projeto</h3>
+          {/* Add/Edit Form */}
+          <div className="bg-gradient-to-r from-purple-50 to-blue-50 p-6 rounded-xl mb-6 border-2 border-purple-200">
+            <h3 className="font-bold mb-4 text-gray-800 flex items-center gap-2">
+              <span className="material-icons-outlined text-purple-600">add_circle</span>
+              Adicionar Novo Projeto
+            </h3>
+
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <input
-                placeholder="Título do Projeto"
-                className="border p-2 rounded"
-                value={newProject.title}
-                onChange={e => setNewProject({ ...newProject, title: e.target.value })}
-              />
-              <input
-                placeholder="URL da Imagem (Capa)"
-                className="border p-2 rounded"
-                value={newProject.image}
-                onChange={e => setNewProject({ ...newProject, image: e.target.value })}
-              />
-              <input
-                placeholder="Link da Demo (Botão Demo)"
-                className="border p-2 rounded"
-                value={newProject.live_link}
-                onChange={e => setNewProject({ ...newProject, live_link: e.target.value })}
-              />
-              <input
-                placeholder="Link de Detalhes (Botão Ver Detalhes)"
-                className="border p-2 rounded"
-                value={newProject.details_link}
-                onChange={e => setNewProject({ ...newProject, details_link: e.target.value })}
-              />
-              <textarea
-                placeholder="Descrição do projeto..."
-                className="border p-2 rounded md:col-span-2 h-24"
-                value={newProject.description}
-                onChange={e => setNewProject({ ...newProject, description: e.target.value })}
-              />
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Título do Projeto *</label>
+                <input
+                  placeholder="Ex: Sistema de Gestão"
+                  className="border-2 border-gray-300 p-3 rounded-lg w-full focus:border-purple-500 focus:ring-2 focus:ring-purple-200 transition-all"
+                  value={newProject.title}
+                  onChange={e => setNewProject({ ...newProject, title: e.target.value })}
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">URL da Imagem (Capa) *</label>
+                <input
+                  placeholder="https://exemplo.com/imagem.jpg"
+                  className="border-2 border-gray-300 p-3 rounded-lg w-full focus:border-purple-500 focus:ring-2 focus:ring-purple-200 transition-all"
+                  value={newProject.image}
+                  onChange={e => setNewProject({ ...newProject, image: e.target.value })}
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Link da Demo (opcional)</label>
+                <input
+                  placeholder="https://projeto-demo.com"
+                  className="border-2 border-gray-300 p-3 rounded-lg w-full focus:border-purple-500 focus:ring-2 focus:ring-purple-200 transition-all"
+                  value={newProject.live_link}
+                  onChange={e => setNewProject({ ...newProject, live_link: e.target.value })}
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Link de Detalhes (opcional)</label>
+                <input
+                  placeholder="https://detalhes.com"
+                  className="border-2 border-gray-300 p-3 rounded-lg w-full focus:border-purple-500 focus:ring-2 focus:ring-purple-200 transition-all"
+                  value={newProject.details_link}
+                  onChange={e => setNewProject({ ...newProject, details_link: e.target.value })}
+                />
+              </div>
+
+              <div className="md:col-span-2">
+                <label className="block text-sm font-medium text-gray-700 mb-1">Descrição do Projeto *</label>
+                <textarea
+                  placeholder="Descreva o projeto, tecnologias usadas, funcionalidades..."
+                  className="border-2 border-gray-300 p-3 rounded-lg w-full h-24 focus:border-purple-500 focus:ring-2 focus:ring-purple-200 transition-all resize-none"
+                  value={newProject.description}
+                  onChange={e => setNewProject({ ...newProject, description: e.target.value })}
+                />
+              </div>
+
+              {/* Preview da Imagem */}
+              {newProject.image && (
+                <div className="md:col-span-2">
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Preview da Imagem:</label>
+                  <img
+                    src={newProject.image}
+                    alt="Preview"
+                    className="w-full max-w-md h-48 object-cover rounded-lg border-2 border-gray-300"
+                    onError={(e) => {
+                      (e.target as HTMLImageElement).src = 'https://placehold.co/400x300?text=Imagem+Inválida';
+                    }}
+                  />
+                </div>
+              )}
             </div>
-            <button onClick={handleAddProject} className="bg-green-600 text-white px-6 py-2 rounded mt-4 hover:bg-green-700 transition">
-              + Adicionar Projeto
+
+            <button
+              onClick={handleAddProject}
+              className="bg-gradient-to-r from-purple-600 to-blue-600 text-white px-6 py-3 rounded-lg mt-4 hover:from-purple-700 hover:to-blue-700 transition-all flex items-center gap-2 font-semibold shadow-lg hover:shadow-xl"
+            >
+              <span className="material-icons-outlined">add</span>
+              Adicionar Projeto
             </button>
           </div>
 
-          {/* List */}
-          <div className="overflow-x-auto">
-            <table className="min-w-full divide-y divide-gray-200">
-              <thead className="bg-gray-50">
-                <tr>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Projeto</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Links</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Ação</th>
-                </tr>
-              </thead>
-              <tbody className="bg-white divide-y divide-gray-200">
-                {projects.map(p => (
-                  <tr key={p.id}>
-                    <td className="px-6 py-4">
-                      <div className="text-sm font-medium text-gray-900">{p.title}</div>
-                      <div className="text-sm text-gray-500 truncate max-w-xs">{p.description}</div>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 flex flex-col gap-1">
-                      {p.live_link && <a href={p.live_link} target="_blank" rel="noreferrer" className="text-blue-500 hover:underline">Demo</a>}
-                      {p.details_link && <a href={p.details_link} target="_blank" rel="noreferrer" className="text-purple-500 hover:underline">Detalhes</a>}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <button onClick={() => handleDeleteProject(p.id)} className="text-red-600 hover:text-red-900 font-medium">Excluir</button>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+          {/* Projects Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {projects.length === 0 && (
+              <div className="col-span-full text-center py-12">
+                <span className="text-6xl mb-4 block">📂</span>
+                <p className="text-gray-500 italic">Nenhum projeto cadastrado ainda.</p>
+              </div>
+            )}
+
+            {projects.map(p => (
+              <div key={p.id} className="bg-white border-2 border-gray-200 rounded-xl overflow-hidden hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
+                {/* Project Image */}
+                <div className="relative h-48 bg-gray-200">
+                  <img
+                    src={p.image}
+                    alt={p.title}
+                    className="w-full h-full object-cover"
+                    onError={(e) => {
+                      (e.target as HTMLImageElement).src = 'https://placehold.co/400x300?text=Sem+Imagem';
+                    }}
+                  />
+                  <div className="absolute top-2 right-2 bg-white px-2 py-1 rounded-full text-xs font-semibold text-gray-600">
+                    ID: {p.id}
+                  </div>
+                </div>
+
+                {/* Project Info */}
+                <div className="p-4">
+                  <h3 className="font-bold text-lg text-gray-900 mb-2 line-clamp-1">{p.title}</h3>
+                  <p className="text-sm text-gray-600 mb-4 line-clamp-2">{p.description}</p>
+
+                  {/* Links */}
+                  <div className="flex flex-wrap gap-2 mb-4">
+                    {p.live_link && (
+                      <a
+                        href={p.live_link}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="text-xs bg-green-100 text-green-700 px-2 py-1 rounded-full hover:bg-green-200 transition flex items-center gap-1"
+                      >
+                        <span className="material-icons-outlined text-sm">open_in_new</span>
+                        Demo
+                      </a>
+                    )}
+                    {p.details_link && (
+                      <a
+                        href={p.details_link}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="text-xs bg-blue-100 text-blue-700 px-2 py-1 rounded-full hover:bg-blue-200 transition flex items-center gap-1"
+                      >
+                        <span className="material-icons-outlined text-sm">info</span>
+                        Detalhes
+                      </a>
+                    )}
+                  </div>
+
+                  {/* Actions */}
+                  <div className="flex gap-2">
+                    <button
+                      onClick={() => handleDeleteProject(p.id)}
+                      className="flex-1 bg-red-500 text-white px-3 py-2 rounded-lg hover:bg-red-600 transition flex items-center justify-center gap-1 text-sm font-medium"
+                    >
+                      <span className="material-icons-outlined text-sm">delete</span>
+                      Excluir
+                    </button>
+                  </div>
+                </div>
+              </div>
+            ))}
           </div>
         </section>
 
