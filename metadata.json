@@ -1,5 +1,5 @@
 {
-  "name": "Yuri Winchester Portfolio",
-  "description": "A multi-themed portfolio website featuring Home, Projects, Skills, and Contact sections with distinct color palettes and Supabase SQL integration.",
+  "name": "Portfólio Yuri Winchester",
+  "description": "Um site de portfólio multi-temático com seções de Início, Projetos, Habilidades e Contato, integrado com banco de dados Supabase.",
   "requestFramePermissions": []
 }

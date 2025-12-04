@@ -45,7 +45,7 @@ const Admin: React.FC = () => {
     if (password === '1234') { 
       setIsAuthenticated(true);
     } else {
-      alert('Incorrect Password');
+      alert('Senha incorreta');
     }
   };
 
@@ -54,22 +54,22 @@ const Admin: React.FC = () => {
       .from('site_settings')
       .upsert({ key: 'profile_image', value: profilePhotoUrl });
     
-    if (!error) alert('Profile photo updated!');
-    else alert('Error updating photo');
+    if (!error) alert('Foto de perfil atualizada!');
+    else alert('Erro ao atualizar foto');
   };
 
   const handleAddProject = async () => {
     if (!newProject.title) return;
     const { error } = await supabase.from('projects').insert([newProject]);
     if (!error) {
-      alert('Project added!');
+      alert('Projeto adicionado!');
       setNewProject({ title: '', description: '', image: '', live_link: '', details_link: '' });
       fetchData();
     }
   };
 
   const handleDeleteProject = async (id: number) => {
-    if(!window.confirm("Are you sure?")) return;
+    if(!window.confirm("Tem certeza que deseja excluir este projeto?")) return;
     const { error } = await supabase.from('projects').delete().eq('id', id);
     if (!error) fetchData();
   };
@@ -77,85 +77,92 @@ const Admin: React.FC = () => {
   if (!isAuthenticated) {
     return (
       <div className="flex h-screen items-center justify-center bg-gray-100">
-        <form onSubmit={handleLogin} className="bg-white p-8 rounded shadow-md">
-          <h2 className="text-xl mb-4">Admin Login</h2>
+        <form onSubmit={handleLogin} className="bg-white p-8 rounded shadow-md w-full max-w-sm">
+          <h2 className="text-xl mb-4 font-bold text-center">Login Administrativo</h2>
           <input 
             type="password" 
             value={password} 
             onChange={e => setPassword(e.target.value)} 
             className="border p-2 w-full mb-4 rounded" 
-            placeholder="Enter PIN (1234)"
+            placeholder="Digite o PIN (1234)"
           />
-          <button className="bg-blue-600 text-white w-full py-2 rounded">Enter</button>
+          <button className="bg-blue-600 text-white w-full py-2 rounded hover:bg-blue-700 transition">Entrar</button>
         </form>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 p-8">
+    <div className="min-h-screen bg-gray-50 p-4 md:p-8 font-sans">
       <div className="max-w-6xl mx-auto">
-        <h1 className="text-3xl font-bold mb-8">Admin Dashboard</h1>
+        <div className="flex justify-between items-center mb-8">
+            <h1 className="text-3xl font-bold text-gray-800">Painel Administrativo</h1>
+            <button onClick={() => setIsAuthenticated(false)} className="text-sm text-red-600 hover:underline">Sair</button>
+        </div>
+
+        {loading && <div className="mb-4 text-blue-600 font-semibold animate-pulse">Carregando dados...</div>}
 
         {/* --- Profile Photo Section --- */}
         <section className="bg-white p-6 rounded-lg shadow mb-8">
-          <h2 className="text-xl font-bold mb-4">Profile Photo</h2>
-          <div className="flex gap-4 items-end">
-            <div className="flex-grow">
-              <label className="block text-sm font-medium text-gray-700">Image URL</label>
+          <h2 className="text-xl font-bold mb-4 text-gray-800">Foto de Perfil</h2>
+          <div className="flex flex-col md:flex-row gap-4 items-end">
+            <div className="flex-grow w-full">
+              <label className="block text-sm font-medium text-gray-700">URL da Imagem</label>
               <input 
                 type="text" 
                 value={profilePhotoUrl}
                 onChange={e => setProfilePhotoUrl(e.target.value)}
                 className="mt-1 block w-full border border-gray-300 rounded-md p-2"
-                placeholder="https://..."
+                placeholder="https://exemplo.com/minha-foto.jpg"
               />
             </div>
-            <button onClick={handleUpdateProfilePhoto} className="bg-blue-600 text-white px-4 py-2 rounded h-10">Save</button>
+            <button onClick={handleUpdateProfilePhoto} className="bg-blue-600 text-white px-4 py-2 rounded h-10 hover:bg-blue-700 w-full md:w-auto">Salvar</button>
           </div>
-          <p className="text-sm text-gray-500 mt-2">Tip: Upload your image to a service like Imgur or use Supabase Storage manually and paste the link here.</p>
+          <p className="text-sm text-gray-500 mt-2">Dica: Use um link direto de imagem (ex: Imgur, Supabase Storage).</p>
         </section>
 
         {/* --- Projects Section --- */}
         <section className="bg-white p-6 rounded-lg shadow mb-8">
-          <h2 className="text-xl font-bold mb-4">Manage Projects</h2>
+          <h2 className="text-xl font-bold mb-4 text-gray-800">Gerenciar Projetos</h2>
           
           {/* Add New */}
-          <div className="bg-gray-50 p-4 rounded mb-6 border">
-            <h3 className="font-semibold mb-2">Add New Project</h3>
+          <div className="bg-gray-50 p-4 rounded mb-6 border border-gray-200">
+            <h3 className="font-semibold mb-2 text-gray-700">Adicionar Novo Projeto</h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <input 
-                placeholder="Title" 
+                placeholder="Título do Projeto" 
                 className="border p-2 rounded" 
                 value={newProject.title} 
                 onChange={e => setNewProject({...newProject, title: e.target.value})} 
               />
               <input 
-                placeholder="Image URL" 
+                placeholder="URL da Imagem (Capa)" 
                 className="border p-2 rounded" 
                 value={newProject.image} 
                 onChange={e => setNewProject({...newProject, image: e.target.value})} 
               />
               <input 
-                placeholder="Live Link" 
+                placeholder="Link da Demo (Botão Demo)" 
                 className="border p-2 rounded" 
                 value={newProject.live_link} 
                 onChange={e => setNewProject({...newProject, live_link: e.target.value})} 
               />
                <input 
-                placeholder="Details Link (optional)" 
+                placeholder="Link de Detalhes (Botão Ver Detalhes)" 
                 className="border p-2 rounded" 
                 value={newProject.details_link} 
                 onChange={e => setNewProject({...newProject, details_link: e.target.value})} 
               />
               <textarea 
-                placeholder="Description" 
-                className="border p-2 rounded md:col-span-2" 
+                placeholder="Descrição do projeto..." 
+                className="border p-2 rounded md:col-span-2 h-24" 
                 value={newProject.description} 
                 onChange={e => setNewProject({...newProject, description: e.target.value})} 
               />
             </div>
-            <button onClick={handleAddProject} className="bg-green-600 text-white px-4 py-2 rounded mt-4">Add Project</button>
+            <button onClick={handleAddProject} className="bg-green-600 text-white px-6 py-2 rounded mt-4 hover:bg-green-700 transition">
+                + Adicionar Projeto
+            </button>
           </div>
 
           {/* List */}
@@ -163,20 +170,24 @@ const Admin: React.FC = () => {
             <table className="min-w-full divide-y divide-gray-200">
               <thead className="bg-gray-50">
                 <tr>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Title</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Projeto</th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Links</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Action</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Ação</th>
                 </tr>
               </thead>
               <tbody className="bg-white divide-y divide-gray-200">
                 {projects.map(p => (
                   <tr key={p.id}>
-                    <td className="px-6 py-4 whitespace-nowrap">{p.title}</td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                      {p.live_link && <a href={p.live_link} target="_blank" className="text-blue-500 hover:underline mr-2">Live</a>}
+                    <td className="px-6 py-4">
+                        <div className="text-sm font-medium text-gray-900">{p.title}</div>
+                        <div className="text-sm text-gray-500 truncate max-w-xs">{p.description}</div>
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 flex flex-col gap-1">
+                      {p.live_link && <a href={p.live_link} target="_blank" rel="noreferrer" className="text-blue-500 hover:underline">Demo</a>}
+                      {p.details_link && <a href={p.details_link} target="_blank" rel="noreferrer" className="text-purple-500 hover:underline">Detalhes</a>}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
-                      <button onClick={() => handleDeleteProject(p.id)} className="text-red-600 hover:text-red-900">Delete</button>
+                      <button onClick={() => handleDeleteProject(p.id)} className="text-red-600 hover:text-red-900 font-medium">Excluir</button>
                     </td>
                   </tr>
                 ))}
@@ -187,17 +198,19 @@ const Admin: React.FC = () => {
 
         {/* --- Messages Section --- */}
         <section className="bg-white p-6 rounded-lg shadow">
-          <h2 className="text-xl font-bold mb-4">Contact Messages</h2>
+          <h2 className="text-xl font-bold mb-4 text-gray-800">Mensagens Recebidas</h2>
           <div className="space-y-4">
-            {messages.length === 0 && <p className="text-gray-500">No messages yet.</p>}
+            {messages.length === 0 && <p className="text-gray-500 italic">Nenhuma mensagem recebida ainda.</p>}
             {messages.map(msg => (
-              <div key={msg.id} className="border-b pb-4">
-                <div className="flex justify-between">
-                  <span className="font-bold">{msg.name}</span>
-                  <span className="text-sm text-gray-500">{new Date(msg.created_at).toLocaleDateString()}</span>
+              <div key={msg.id} className="border-b pb-4 hover:bg-gray-50 p-2 rounded transition">
+                <div className="flex flex-col sm:flex-row justify-between mb-1">
+                  <span className="font-bold text-gray-900">{msg.name}</span>
+                  <span className="text-sm text-gray-500">{new Date(msg.created_at).toLocaleDateString('pt-BR')} às {new Date(msg.created_at).toLocaleTimeString('pt-BR')}</span>
                 </div>
-                <p className="text-sm text-blue-600">{msg.email}</p>
-                <p className="mt-1 text-gray-700">{msg.message}</p>
+                <p className="text-sm text-blue-600 mb-2">{msg.email}</p>
+                <div className="bg-gray-100 p-3 rounded text-gray-700 whitespace-pre-wrap">
+                    {msg.message}
+                </div>
               </div>
             ))}
           </div>

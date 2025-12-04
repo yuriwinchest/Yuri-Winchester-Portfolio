@@ -52,7 +52,7 @@ const Projects: React.FC = () => {
                 />
                 <div>
                     <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">Yuri Winchester</h1>
-                    <p className="text-gray-600">Software Engineer & Web Developer</p>
+                    <p className="text-gray-600">Engenheiro de Software & Desenvolvedor Web</p>
                 </div>
             </div>
             <div className="hidden md:block">
@@ -69,9 +69,9 @@ const Projects: React.FC = () => {
       <main className="py-12 px-8 sm:px-12 flex-grow">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16">
-            <h2 className="text-4xl md:text-5xl font-bold tracking-tight text-gray-900">My Projects</h2>
+            <h2 className="text-4xl md:text-5xl font-bold tracking-tight text-gray-900">Meus Projetos</h2>
             <p className="mt-4 text-lg text-gray-600 max-w-2xl mx-auto">
-              A selection of my recent work. I'm passionate about building clean, efficient, and user-friendly applications.
+              Uma seleção dos meus trabalhos recentes. Sou apaixonado por construir aplicações limpas, eficientes e fáceis de usar.
             </p>
           </div>
 
@@ -85,7 +85,7 @@ const Projects: React.FC = () => {
                   
                   <div className="mt-auto flex items-center justify-between">
                     <a href={project.details_link || "#"} className="font-semibold inline-flex items-center hover:underline" style={{ color: primaryColor }}>
-                      View Details
+                      Ver Detalhes
                       <span className="material-symbols-outlined ml-1 text-lg transition-transform group-hover:translate-x-1">arrow_forward</span>
                     </a>
                     {project.live_link && (
@@ -97,7 +97,7 @@ const Projects: React.FC = () => {
                         style={{ backgroundColor: primaryColor }}
                         >
                         <span className="material-symbols-outlined text-base">open_in_new</span>
-                        Live Demo
+                        Demo
                         </a>
                     )}
                   </div>

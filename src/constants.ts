@@ -26,16 +26,44 @@ export const IMAGES = {
 export const PROJECTS: Project[] = [
   {
     id: 1,
-    title: "Project Management Tool",
-    description: "A collaborative platform for teams to manage tasks, track progress, and communicate effectively. Built with React and Node.js.",
+    title: "Ferramenta de Gestão de Projetos",
+    description: "Uma plataforma colaborativa para equipes gerenciarem tarefas, acompanharem o progresso e se comunicarem de forma eficaz. Construído com React e Node.js.",
     image: IMAGES.PROJECT_MGMT,
     live_link: "#"
   },
   {
     id: 2,
-    title: "E-commerce Platform",
-    description: "A fully-featured online store with product catalogs, shopping cart, and secure checkout. Developed using Next.js and Stripe integration.",
+    title: "Plataforma de E-commerce",
+    description: "Uma loja online completa com catálogos de produtos, carrinho de compras e checkout seguro. Desenvolvido usando Next.js e integração com Stripe.",
     image: IMAGES.ECOMMERCE,
+    live_link: "#"
+  },
+  {
+    id: 3,
+    title: "App de Previsão do Tempo",
+    description: "Um app limpo e intuitivo que fornece dados em tempo real e previsões usando uma API de terceiros. Construído com Vue.js e Tailwind CSS.",
+    image: IMAGES.WEATHER,
+    live_link: "#"
+  },
+  {
+    id: 4,
+    title: "Dashboard de Visualização de Dados",
+    description: "Um painel interativo para visualizar conjuntos de dados complexos com gráficos dinâmicos. Desenvolvido com D3.js e Python (Flask).",
+    image: IMAGES.DASHBOARD,
+    live_link: "#"
+  },
+  {
+    id: 5,
+    title: "Blog Pessoal Minimalista",
+    description: "Um motor de blog leve baseado em markdown com foco em desempenho e simplicidade. Construído do zero com Go e SQLite.",
+    image: IMAGES.BLOG,
+    live_link: "#"
+  },
+  {
+    id: 6,
+    title: "Chatbot com IA",
+    description: "Um chatbot de atendimento ao cliente integrado com plataforma de mensagens para suporte instantâneo. Utiliza PNL e modelos de aprendizado de máquina.",
+    image: IMAGES.CHATBOT,
     live_link: "#"
   }
 ];
@@ -61,7 +89,7 @@ export const SKILLS: SkillCategory[] = [
     ]
   },
   {
-    title: "Databases",
+    title: "Banco de Dados",
     icon: "storage",
     skills: [
       { name: "MySQL" },
@@ -71,7 +99,7 @@ export const SKILLS: SkillCategory[] = [
     ]
   },
   {
-    title: "Authentication",
+    title: "Autenticação",
     icon: "verified_user",
     skills: [
       { name: "OAuth 2.0" },
@@ -81,7 +109,7 @@ export const SKILLS: SkillCategory[] = [
     ]
   },
   {
-    title: "Payments",
+    title: "Pagamentos",
     icon: "credit_card",
     skills: [
       { name: "Mercado Pago" },
@@ -99,7 +127,7 @@ export const SKILLS: SkillCategory[] = [
     ]
   },
   {
-    title: "AI & Machine Learning",
+    title: "IA & Machine Learning",
     icon: "smart_toy",
     skills: [
       { name: "TensorFlow" },

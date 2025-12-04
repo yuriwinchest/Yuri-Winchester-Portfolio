@@ -27,7 +27,7 @@ const Home: React.FC = () => {
         setProfileImage(data.value);
       }
     } catch (error) {
-      console.error("Error loading profile image", error);
+      console.error("Erro ao carregar imagem de perfil", error);
     } finally {
       setLoading(false);
     }
@@ -44,10 +44,10 @@ const Home: React.FC = () => {
             {/* Left Content */}
             <div className="text-center lg:text-left">
               <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight text-zinc-900">
-                Hi, I'm Yuri<br />Winchester
+                Olá, eu sou<br />Yuri Winchester
               </h1>
               <p className="mt-4 text-lg text-zinc-600 max-w-xl mx-auto lg:mx-0">
-                A creative programmer passionate about building beautiful and functional web experiences. I turn complex problems into elegant software solutions.
+                Um programador criativo apaixonado por construir experiências web bonitas e funcionais. Transformo problemas complexos em soluções de software elegantes.
               </p>
               
               <div className="mt-8 flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4">
@@ -56,14 +56,14 @@ const Home: React.FC = () => {
                   className="w-full sm:w-auto inline-flex items-center justify-center px-8 py-3 text-white font-medium rounded-md shadow-sm hover:opacity-90 transition-opacity"
                   style={{ backgroundColor: primaryColor }}
                 >
-                  View My Projects
+                  Ver Meus Projetos
                   <span className="material-icons ml-2">arrow_forward</span>
                 </Link>
                 <Link
                   to="/skills"
                   className="w-full sm:w-auto inline-flex items-center justify-center px-8 py-3 bg-zinc-200 text-zinc-800 font-medium rounded-md hover:bg-zinc-300 transition-colors"
                 >
-                  Explore Skills
+                  Explorar Habilidades
                 </Link>
               </div>
             </div>
@@ -72,7 +72,7 @@ const Home: React.FC = () => {
             <div className="flex justify-center items-center">
               <div className="relative w-full max-w-md aspect-square rounded-lg shadow-2xl overflow-hidden bg-zinc-200">
                 {loading ? (
-                    <div className="w-full h-full flex items-center justify-center animate-pulse text-zinc-400">Loading...</div>
+                    <div className="w-full h-full flex items-center justify-center animate-pulse text-zinc-400">Carregando...</div>
                 ) : (
                     <img 
                       src={profileImage} 

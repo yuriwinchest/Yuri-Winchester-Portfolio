@@ -21,9 +21,9 @@ const Skills: React.FC = () => {
             style={{ borderColor: primaryColor }}
           />
           <h1 className="text-4xl md:text-5xl font-bold text-white">Yuri Winchester</h1>
-          <p className="mt-2 text-xl font-medium" style={{ color: primaryColor }}>Technical Skills</p>
+          <p className="mt-2 text-xl font-medium" style={{ color: primaryColor }}>Habilidades Técnicas</p>
           <p className="mt-4 max-w-2xl mx-auto text-gray-400">
-            A passionate programmer with a diverse skill set, spanning from modern frontend frameworks to scalable backend architectures and cutting-edge AI technologies.
+            Um programador apaixonado com um conjunto diversificado de habilidades, abrangendo desde frameworks frontend modernos até arquiteturas backend escaláveis e tecnologias de IA de ponta.
           </p>
         </div>
 
