@@ -18,6 +18,9 @@ const Admin: React.FC = () => {
   const [projectImageFile, setProjectImageFile] = useState<File | null>(null);
   const [uploadingProjectImage, setUploadingProjectImage] = useState(false);
 
+  const [editingProject, setEditingProject] = useState<Project | null>(null);
+  const [editImageFile, setEditImageFile] = useState<File | null>(null);
+
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
@@ -149,6 +152,63 @@ const Admin: React.FC = () => {
       fetchData();
     } catch (err: any) {
       console.error('❌ Erro completo:', err);
+      alert(`❌ Erro: ${err.message}`);
+    }
+  };
+
+  const handleUpdateProject = async () => {
+    if (!editingProject) return;
+
+    console.log('✏️ Atualizando projeto:', editingProject);
+
+    if (!editingProject.title || !editingProject.description) {
+      alert('❌ Título e descrição são obrigatórios!');
+      return;
+    }
+
+    try {
+      // Se houver nova imagem, fazer upload
+      let imageUrl = editingProject.image;
+      if (editImageFile) {
+        console.log('📤 Fazendo upload da nova imagem...');
+        const fileName = `projects/project-${Date.now()}.${editImageFile.name.split('.').pop()}`;
+
+        const { error: uploadError } = await supabase.storage
+          .from('documents')
+          .upload(fileName, editImageFile, {
+            cacheControl: '3600',
+            upsert: false
+          });
+
+        if (uploadError) throw uploadError;
+
+        const { data: urlData } = supabase.storage
+          .from('documents')
+          .getPublicUrl(fileName);
+
+        imageUrl = urlData.publicUrl;
+      }
+
+      // Atualizar projeto no banco
+      const { error } = await supabase
+        .from('projects')
+        .update({
+          title: editingProject.title,
+          description: editingProject.description,
+          image: imageUrl,
+          live_link: editingProject.live_link,
+          details_link: editingProject.details_link
+        })
+        .eq('id', editingProject.id);
+
+      if (error) throw error;
+
+      alert('✅ Projeto atualizado com sucesso!');
+      setEditingProject(null);
+      setEditImageFile(null);
+      fetchData();
+    } catch (err: any) {
+      console.error('❌ Erro ao atualizar:', err);
       alert(`❌ Erro: ${err.message}`);
     }
   };
@@ -374,6 +434,13 @@ const Admin: React.FC = () => {
                   {/* Actions */}
                   <div className="flex gap-2">
                     <button
+                      onClick={() => setEditingProject(p)}
+                      className="flex-1 bg-blue-500 text-white px-3 py-2 rounded-lg hover:bg-blue-600 transition flex items-center justify-center gap-1 text-sm font-medium"
+                    >
+                      <span className="material-icons-outlined text-sm">edit</span>
+                      Editar
+                    </button>
+                    <button
                       onClick={() => handleDeleteProject(p.id)}
                       className="flex-1 bg-red-500 text-white px-3 py-2 rounded-lg hover:bg-red-600 transition flex items-center justify-center gap-1 text-sm font-medium"
                     >
@@ -386,6 +453,119 @@ const Admin: React.FC = () => {
             ))}
           </div>
         </section>
+
+        {/* --- Edit Project Modal --- */}
+        {editingProject && (
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+            <div className="bg-white rounded-2xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+              <div className="p-6">
+                <div className="flex justify-between items-center mb-6">
+                  <h2 className="text-2xl font-bold text-gray-800">✏️ Editar Projeto</h2>
+                  <button
+                    onClick={() => {
+                      setEditingProject(null);
+                      setEditImageFile(null);
+                    }}
+                    className="text-gray-500 hover:text-gray-700"
+                  >
+                    <span className="material-icons-outlined">close</span>
+                  </button>
+                </div>
+
+                <div className="space-y-4">
+                  {/* Título */}
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Título *</label>
+                    <input
+                      type="text"
+                      value={editingProject.title}
+                      onChange={(e) => setEditingProject({ ...editingProject, title: e.target.value })}
+                      className="border-2 border-gray-300 p-3 rounded-lg w-full focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all"
+                    />
+                  </div>
+
+                  {/* Descrição */}
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Descrição *</label>
+                    <textarea
+                      value={editingProject.description}
+                      onChange={(e) => setEditingProject({ ...editingProject, description: e.target.value })}
+                      className="border-2 border-gray-300 p-3 rounded-lg w-full h-24 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all resize-none"
+                    />
+                  </div>
+
+                  {/* Imagem Atual */}
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Imagem Atual:</label>
+                    <img
+                      src={editImageFile ? URL.createObjectURL(editImageFile) : editingProject.image}
+                      alt="Preview"
+                      className="w-full max-w-md h-48 object-cover rounded-lg border-2 border-gray-300"
+                    />
+                  </div>
+
+                  {/* Nova Imagem */}
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Alterar Imagem (opcional):</label>
+                    <input
+                      type="file"
+                      accept="image/*"
+                      onChange={(e) => {
+                        if (e.target.files && e.target.files[0]) {
+                          setEditImageFile(e.target.files[0]);
+                        }
+                      }}
+                      className="w-full p-2 border border-gray-300 rounded-md text-sm"
+                    />
+                    {editImageFile && (
+                      <p className="text-sm text-green-600 mt-1">✅ Nova imagem: {editImageFile.name}</p>
+                    )}
+                  </div>
+
+                  {/* Links */}
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Link da Demo (opcional)</label>
+                    <input
+                      type="text"
+                      value={editingProject.live_link || ''}
+                      onChange={(e) => setEditingProject({ ...editingProject, live_link: e.target.value })}
+                      className="border-2 border-gray-300 p-3 rounded-lg w-full focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Link de Detalhes (opcional)</label>
+                    <input
+                      type="text"
+                      value={editingProject.details_link || ''}
+                      onChange={(e) => setEditingProject({ ...editingProject, details_link: e.target.value })}
+                      className="border-2 border-gray-300 p-3 rounded-lg w-full focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all"
+                    />
+                  </div>
+
+                  {/* Botões */}
+                  <div className="flex gap-3 pt-4">
+                    <button
+                      onClick={handleUpdateProject}
+                      className="flex-1 bg-green-600 text-white px-6 py-3 rounded-lg hover:bg-green-700 transition font-semibold"
+                    >
+                      💾 Salvar Alterações
+                    </button>
+                    <button
+                      onClick={() => {
+                        setEditingProject(null);
+                        setEditImageFile(null);
+                      }}
+                      className="flex-1 bg-gray-500 text-white px-6 py-3 rounded-lg hover:bg-gray-600 transition font-semibold"
+                    >
+                      ❌ Cancelar
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
 
         {/* --- Messages Section --- */}
         <section className="bg-white p-6 rounded-lg shadow">
