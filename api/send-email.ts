@@ -39,7 +39,7 @@ export default async function handler(req: any, res: any) {
             },
             body: JSON.stringify({
                 from: 'onboarding@resend.dev',
-                to: 'yuriallmeida@mail.com',
+                to: 'yuriallmeida@mail.com', // Este e-mail DEVE ser o mesmo da sua conta Resend
                 subject,
                 html,
             }),
