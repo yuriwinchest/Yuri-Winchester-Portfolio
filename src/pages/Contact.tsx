@@ -54,16 +54,28 @@ const Contact: React.FC = () => {
     // await supabase.from('messages').insert([formData]); 
   };
 
+  // Handler específico para salvar no Supabase (Backup)
+  const saveToSupabase = async (data: typeof formData) => {
+    try {
+      const { error } = await supabase.from('messages').insert([data]);
+      if (error) {
+        console.error('Erro ao salvar no Supabase:', error);
+      } else {
+        console.log('Mensagem salva no backup (Supabase) com sucesso.');
+      }
+    } catch (err) {
+      console.error('Erro crítico ao salvar no Supabase:', err);
+    }
+  };
+
   const onFormSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setStatus('loading');
 
-    // Tentar salvar no Supabase (Backup) sem bloquear o envio
-    supabase.from('messages').insert([formData]).then(({ error }) => {
-      if (error) console.error('Erro ao salvar no Supabase:', error);
-    }).catch(err => console.error('Erro Supabase:', err));
+    // Dispara o backup em segundo plano sem travar o envio do e-mail
+    saveToSupabase(formData);
 
-    // Enviar para o Formspree
+    // Enviar para o Formspree (que gerencia o evento do formulário)
     handleFormspreeSubmit(e);
   };
 
