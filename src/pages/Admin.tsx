@@ -49,7 +49,7 @@ const Admin: React.FC = () => {
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
     // Simple client-side check for demonstration. Real apps should use Supabase Auth.
-    if (password === '1234') {
+    if (password === '123') {
       setIsAuthenticated(true);
     } else {
       alert('Senha incorreta');
@@ -229,7 +229,7 @@ const Admin: React.FC = () => {
             value={password}
             onChange={e => setPassword(e.target.value)}
             className="border p-2 w-full mb-4 rounded"
-            placeholder="Digite o PIN (1234)"
+            placeholder="Digite o PIN (123)"
             autoComplete="current-password"
             aria-label="Senha de acesso"
           />
