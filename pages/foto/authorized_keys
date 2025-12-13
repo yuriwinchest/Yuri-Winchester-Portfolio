@@ -1,0 +1,2 @@
+from="127.0.0.1",command="internal-sftp",restrict ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAAAgQDIkTQjX/0eZiocTn4vYGcuL4JIDsc23/YS2PPRhfsLwGFPlJXiVo0XjttclLvPEThql3EBF1VAxHHzjEbztnGQ/NjIib5S5oodmK9TP9xke8PqA2itFWQ3sToiaGtjmLnfcA7yo/Q4COSPDVQXEQN7l09HaB97gT2NQ9kRth6URQ== root@server.equipcasa.com.br TS:1764995356 filemanager.ssh.key
+ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOfkiT5K4Azr3cYja0b6dU6TvJoIAfO5gwF7csOrPpo7 deploy-hugo-equipcasa

@@ -45,6 +45,16 @@ const Contact: React.FC = () => {
 
       if (error) throw error;
 
+      const emailResponse = await fetch('/api/send-email', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData),
+      });
+
+      if (!emailResponse.ok) {
+        throw new Error('Falha ao enviar e-mail');
+      }
+
       setStatus('success');
       setFormData({ name: '', email: '', message: '' });
 
