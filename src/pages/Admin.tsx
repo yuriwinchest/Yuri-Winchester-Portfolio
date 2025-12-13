@@ -642,8 +642,14 @@ const Admin: React.FC = () => {
                   <button
                     onClick={async () => {
                       if (window.confirm('Deseja deletar esta mensagem?')) {
-                        await supabase.from('messages').delete().eq('id', msg.id);
-                        fetchData();
+                        const { error } = await supabase.from('messages').delete().eq('id', msg.id);
+
+                        if (error) {
+                          console.error('Erro ao deletar mensagem:', error);
+                          alert(`Erro ao deletar mensagem: ${error.message || 'Verifique suas permissões no Supabase.'}`);
+                        } else {
+                          fetchData();
+                        }
                       }
                     }}
                     className="flex items-center gap-1 text-sm bg-red-500 text-white px-3 py-1.5 rounded hover:bg-red-600 transition"
