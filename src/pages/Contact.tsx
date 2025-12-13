@@ -23,7 +23,11 @@ const Contact: React.FC = () => {
     if (formspreeState.succeeded) {
       handleSuccess();
     }
-  }, [formspreeState.succeeded]);
+    if (formspreeState.errors && formspreeState.errors.length > 0) {
+      setStatus('error');
+      setTimeout(() => setStatus('idle'), 5000);
+    }
+  }, [formspreeState.succeeded, formspreeState.errors]);
 
   const fetchProfileImage = async () => {
     try {
