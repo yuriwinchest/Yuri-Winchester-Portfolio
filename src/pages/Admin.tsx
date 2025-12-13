@@ -490,6 +490,14 @@ const Admin: React.FC = () => {
                       value={editingProject.title}
                       onChange={(e) => setEditingProject({ ...editingProject, title: e.target.value })}
                       className="border-2 border-gray-300 p-3 rounded-lg w-full focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all"
+                      placeholder="Título do projeto"
+                      title="Título do projeto"
+                      aria-label="Título do projeto"
+                    />
+                      type="text"
+                      value={editingProject.title}
+                      onChange={(e: React.ChangeEvent<HTMLInputElement>) => setEditingProject({ ...editingProject, title: e.target.value })}
+                      className="border-2 border-gray-300 p-3 rounded-lg w-full focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all"
                     />
                   </div>
 
@@ -547,6 +555,8 @@ const Admin: React.FC = () => {
                       value={editingProject.live_link || ''}
                       onChange={(e) => setEditingProject({ ...editingProject, live_link: e.target.value })}
                       className="border-2 border-gray-300 p-3 rounded-lg w-full focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all"
+                      placeholder="Insira o link da demo"
+                      title="Link da demo do projeto"
                     />
                   </div>
 
@@ -557,6 +567,8 @@ const Admin: React.FC = () => {
                       value={editingProject.details_link || ''}
                       onChange={(e) => setEditingProject({ ...editingProject, details_link: e.target.value })}
                       className="border-2 border-gray-300 p-3 rounded-lg w-full focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all"
+                      placeholder="Insira o link de detalhes"
+                      title="Link de detalhes do projeto"
                     />
                   </div>
 
