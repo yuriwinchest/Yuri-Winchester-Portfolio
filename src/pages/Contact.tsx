@@ -2,9 +2,13 @@ import React, { useState, useEffect } from 'react';
 import Navbar from '../components/Navbar';
 import { IMAGES, CONTACT_INFO } from '../constants';
 import { supabase } from '../supabaseClient';
+import { useForm, ValidationError } from '@formspree/react';
 
 const Contact: React.FC = () => {
   const primaryColor = "#3b82f6"; // blue-500
+
+  // Formspree Hook (substitua "xpwvbyrr" pelo seu ID se mudar)
+  const [formspreeState, handleFormspreeSubmit] = useForm("xpwvbyrr");
 
   const [formData, setFormData] = useState({ name: '', email: '', message: '' });
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
@@ -13,6 +17,13 @@ const Contact: React.FC = () => {
   useEffect(() => {
     fetchProfileImage();
   }, []);
+
+  // Monitora sucesso do Formspree
+  useEffect(() => {
+    if (formspreeState.succeeded) {
+      handleSuccess();
+    }
+  }, [formspreeState.succeeded]);
 
   const fetchProfileImage = async () => {
     try {
@@ -34,39 +45,29 @@ const Contact: React.FC = () => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSuccess = async () => {
+    setStatus('success');
+    setFormData({ name: '', email: '', message: '' });
+    setTimeout(() => setStatus('idle'), 5000);
+
+    // Opcional: Salvar no Supabase mesmo usando Formspree
+    // await supabase.from('messages').insert([formData]); 
+  };
+
+  const onFormSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setStatus('loading');
 
+    // Primeiro salva no Supabase (Backup)
     try {
-      const { error } = await supabase
-        .from('messages')
-        .insert([formData]);
-
-      if (error) throw error;
-
-      const emailResponse = await fetch('/api/send-email', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData),
-      });
-
-      if (!emailResponse.ok) {
-        const errorData = await emailResponse.json().catch(() => ({}));
-        console.error('Detalhes do erro de email:', errorData);
-        throw new Error(errorData.error || errorData.details?.message || `Erro HTTP: ${emailResponse.status}`);
-      }
-
-      setStatus('success');
-      setFormData({ name: '', email: '', message: '' });
-
-      // Reset status after 5 seconds
-      setTimeout(() => setStatus('idle'), 5000);
-    } catch (error) {
-      console.error('Erro ao enviar mensagem:', error);
-      setStatus('error');
-      setTimeout(() => setStatus('idle'), 5000);
+      const { error } = await supabase.from('messages').insert([formData]);
+      if (error) console.error('Erro ao salvar no Supabase:', error);
+    } catch (err) {
+      console.error('Erro Supabase:', err);
     }
+
+    // Depois envia para o Formspree
+    handleFormspreeSubmit(e);
   };
 
   return (
@@ -187,7 +188,7 @@ const Contact: React.FC = () => {
                   Envie sua Mensagem
                 </h2>
 
-                <form onSubmit={handleSubmit} className="space-y-6">
+                <form onSubmit={onFormSubmit} className="space-y-6">
                   <div>
                     <label htmlFor="name" className="block text-sm font-semibold text-slate-700 mb-2">
                       Nome Completo *
@@ -202,6 +203,7 @@ const Contact: React.FC = () => {
                       placeholder="Seu nome"
                       className="w-full px-4 py-3 rounded-xl border-2 border-slate-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all outline-none text-slate-900"
                     />
+                    <ValidationError prefix="Name" field="name" errors={formspreeState.errors} />
                   </div>
 
                   <div>
@@ -218,6 +220,7 @@ const Contact: React.FC = () => {
                       placeholder="seu@email.com"
                       className="w-full px-4 py-3 rounded-xl border-2 border-slate-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all outline-none text-slate-900"
                     />
+                    <ValidationError prefix="Email" field="email" errors={formspreeState.errors} />
                   </div>
 
                   <div>
@@ -234,14 +237,15 @@ const Contact: React.FC = () => {
                       placeholder="Conte-me sobre seu projeto ou ideia..."
                       className="w-full px-4 py-3 rounded-xl border-2 border-slate-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all outline-none resize-none text-slate-900"
                     ></textarea>
+                    <ValidationError prefix="Message" field="message" errors={formspreeState.errors} />
                   </div>
 
                   <button
                     type="submit"
-                    disabled={status === 'loading'}
+                    disabled={status === 'loading' || formspreeState.submitting}
                     className="w-full flex justify-center items-center gap-2 py-4 px-6 border border-transparent rounded-xl shadow-lg text-lg font-bold text-white bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-300 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed hover:scale-[1.02] active:scale-[0.98]"
                   >
-                    {status === 'loading' ? (
+                    {status === 'loading' || formspreeState.submitting ? (
                       <>
                         <span className="material-icons-outlined animate-spin">refresh</span>
                         Enviando...
