@@ -494,11 +494,6 @@ const Admin: React.FC = () => {
                       title="Título do projeto"
                       aria-label="Título do projeto"
                     />
-                      type="text"
-                      value={editingProject.title}
-                      onChange={(e: React.ChangeEvent<HTMLInputElement>) => setEditingProject({ ...editingProject, title: e.target.value })}
-                      className="border-2 border-gray-300 p-3 rounded-lg w-full focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all"
-                    />
                   </div>
 
                   {/* Descrição */}
