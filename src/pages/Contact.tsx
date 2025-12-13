@@ -54,7 +54,7 @@ const Contact: React.FC = () => {
     // await supabase.from('messages').insert([formData]); 
   };
 
-  const onFormSubmit = async (e: React.FormEvent) => {
+  const onFormSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setStatus('loading');
 
