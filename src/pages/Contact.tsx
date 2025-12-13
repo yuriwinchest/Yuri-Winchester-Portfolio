@@ -52,7 +52,9 @@ const Contact: React.FC = () => {
       });
 
       if (!emailResponse.ok) {
-        throw new Error('Falha ao enviar e-mail');
+        const errorData = await emailResponse.json().catch(() => ({}));
+        console.error('Detalhes do erro de email:', errorData);
+        throw new Error(errorData.error || errorData.details?.message || `Erro HTTP: ${emailResponse.status}`);
       }
 
       setStatus('success');
