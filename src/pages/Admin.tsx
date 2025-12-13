@@ -225,6 +225,7 @@ const Admin: React.FC = () => {
         <form onSubmit={handleLogin} className="bg-white p-8 rounded shadow-md w-full max-w-sm">
           <h2 className="text-xl mb-4 font-bold text-center">Login Administrativo</h2>
           <input
+            id="password-input"
             type="password"
             value={password}
             onChange={e => setPassword(e.target.value)}
@@ -232,6 +233,7 @@ const Admin: React.FC = () => {
             placeholder="Digite o PIN (123)"
             autoComplete="current-password"
             aria-label="Senha de acesso"
+            title="Senha de acesso"
           />
           <button className="bg-blue-600 text-white w-full py-2 rounded hover:bg-blue-700 transition">Entrar</button>
         </form>
@@ -344,12 +346,15 @@ const Admin: React.FC = () => {
               </div>
 
               <div className="md:col-span-2">
-                <label className="block text-sm font-medium text-gray-700 mb-1">Descrição do Projeto *</label>
+                <label htmlFor="new-project-description" className="block text-sm font-medium text-gray-700 mb-1">Descrição do Projeto *</label>
                 <textarea
+                  id="new-project-description"
                   placeholder="Descreva o projeto, tecnologias usadas, funcionalidades..."
                   className="border-2 border-gray-300 p-3 rounded-lg w-full h-24 focus:border-purple-500 focus:ring-2 focus:ring-purple-200 transition-all resize-none"
                   value={newProject.description}
                   onChange={e => setNewProject({ ...newProject, description: e.target.value })}
+                  aria-label="Descrição do novo projeto"
+                  title="Descrição do novo projeto"
                 />
               </div>
 
@@ -490,11 +495,15 @@ const Admin: React.FC = () => {
 
                   {/* Descrição */}
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Descrição *</label>
+                    <label htmlFor="edit-project-description" className="block text-sm font-medium text-gray-700 mb-1">Descrição *</label>
                     <textarea
+                      id="edit-project-description"
                       value={editingProject.description}
                       onChange={(e) => setEditingProject({ ...editingProject, description: e.target.value })}
                       className="border-2 border-gray-300 p-3 rounded-lg w-full h-24 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all resize-none"
+                      aria-label="Editar descrição do projeto"
+                      title="Editar descrição do projeto"
+                      placeholder="Descrição do projeto"
                     />
                   </div>
 
