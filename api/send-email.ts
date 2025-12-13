@@ -12,9 +12,9 @@ export default async function handler(req: any, res: any) {
             return;
         }
 
-        const apiKey = process.env.RESEND_API_KEY;
+        const apiKey = process.env.RESEND_API_KEY || process.env.EMAIL_KEY;
         if (!apiKey) {
-            res.status(500).json({ error: 'RESEND_API_KEY not configured' });
+            res.status(500).json({ error: 'RESEND_API_KEY (or EMAIL_KEY) not configured' });
             return;
         }
 
