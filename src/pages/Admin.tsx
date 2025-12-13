@@ -287,18 +287,22 @@ const Admin: React.FC = () => {
 
                 {/* Opção 1: Upload de Arquivo */}
                 <div className="mb-3 p-3 bg-blue-50 rounded-lg border border-blue-200">
-                  <label className="block text-sm font-semibold text-gray-700 mb-2">📁 Opção 1: Enviar do Computador</label>
-                  <input
-                    type="file"
-                    accept="image/*"
-                    onChange={(e) => {
-                      if (e.target.files && e.target.files[0]) {
-                        setProjectImageFile(e.target.files[0]);
-                        setNewProject({ ...newProject, image: '' }); // Limpar URL se selecionar arquivo
-                      }
-                    }}
-                    className="w-full p-2 border border-gray-300 rounded-md text-sm"
-                  />
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    📁 Opção 1: Enviar do Computador
+                    <input
+                      type="file"
+                      accept="image/*"
+                      aria-label="Selecionar imagem do projeto"
+                      title="Selecionar imagem do projeto"
+                      onChange={(e) => {
+                        if (e.target.files && e.target.files[0]) {
+                          setProjectImageFile(e.target.files[0]);
+                          setNewProject({ ...newProject, image: '' }); // Limpar URL se selecionar arquivo
+                        }
+                      }}
+                      className="w-full p-2 border border-gray-300 rounded-md text-sm mt-1"
+                    />
+                  </label>
                   {projectImageFile && (
                     <p className="text-sm text-green-600 mt-1">✅ {projectImageFile.name}</p>
                   )}
@@ -506,17 +510,21 @@ const Admin: React.FC = () => {
 
                   {/* Nova Imagem */}
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">Alterar Imagem (opcional):</label>
-                    <input
-                      type="file"
-                      accept="image/*"
-                      onChange={(e) => {
-                        if (e.target.files && e.target.files[0]) {
-                          setEditImageFile(e.target.files[0]);
-                        }
-                      }}
-                      className="w-full p-2 border border-gray-300 rounded-md text-sm"
-                    />
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Alterar Imagem (opcional):
+                      <input
+                        type="file"
+                        accept="image/*"
+                        aria-label="Alterar imagem do projeto"
+                        title="Alterar imagem do projeto"
+                        onChange={(e) => {
+                          if (e.target.files && e.target.files[0]) {
+                            setEditImageFile(e.target.files[0]);
+                          }
+                        }}
+                        className="w-full p-2 border border-gray-300 rounded-md text-sm mt-1"
+                      />
+                    </label>
                     {editImageFile && (
                       <p className="text-sm text-green-600 mt-1">✅ Nova imagem: {editImageFile.name}</p>
                     )}
