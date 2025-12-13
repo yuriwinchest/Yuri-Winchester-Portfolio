@@ -58,15 +58,12 @@ const Contact: React.FC = () => {
     e.preventDefault();
     setStatus('loading');
 
-    // Primeiro salva no Supabase (Backup)
-    try {
-      const { error } = await supabase.from('messages').insert([formData]);
+    // Tentar salvar no Supabase (Backup) sem bloquear o envio
+    supabase.from('messages').insert([formData]).then(({ error }) => {
       if (error) console.error('Erro ao salvar no Supabase:', error);
-    } catch (err) {
-      console.error('Erro Supabase:', err);
-    }
+    }).catch(err => console.error('Erro Supabase:', err));
 
-    // Depois envia para o Formspree
+    // Enviar para o Formspree
     handleFormspreeSubmit(e);
   };
 
