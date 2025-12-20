@@ -23,6 +23,7 @@ const Contact: React.FC = () => {
     if (formspreeState.succeeded) {
       handleSuccess();
     }
+    // Check for Formspree errors
     if (formspreeState.errors) {
       setStatus('error');
       setTimeout(() => setStatus('idle'), 5000);
