@@ -7,10 +7,10 @@ interface FooterProps {
 
 const SocialLink: React.FC<{ href: string; children: React.ReactNode; primaryColor: string; textColor: string }> = ({ href, children, primaryColor, textColor }) => {
   const [isHovered, setIsHovered] = useState(false);
-  
+
   return (
-    <a 
-      href={href} 
+    <a
+      href={href}
       className={`${textColor} transition-colors`}
       style={{ color: isHovered ? primaryColor : undefined }}
       onMouseEnter={() => setIsHovered(true)}
@@ -28,12 +28,7 @@ const Footer: React.FC<FooterProps> = ({ primaryColor, isDark = false }) => {
   return (
     <footer className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
       <div className={`border-t ${borderColor} pt-6 flex flex-col sm:flex-row justify-between items-center gap-4`}>
-        <p className={`text-sm ${textColor}`}>© 2024 Yuri Winchester. Todos os direitos reservados.</p>
-        <div className="flex space-x-4">
-          <SocialLink href="#" primaryColor={primaryColor} textColor={textColor}>GitHub</SocialLink>
-          <SocialLink href="#" primaryColor={primaryColor} textColor={textColor}>LinkedIn</SocialLink>
-          <SocialLink href="#" primaryColor={primaryColor} textColor={textColor}>Twitter</SocialLink>
-        </div>
+        <p className={`text-sm ${textColor}`}>© 2025 Yuri Winchester. Todos os direitos reservados.</p>
       </div>
     </footer>
   );
