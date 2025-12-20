@@ -70,7 +70,7 @@ const Projects: React.FC = () => {
       <main className="py-12 px-8 sm:px-12 flex-grow">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16">
-            <h2 className="text-4xl md:text-5xl font-bold tracking-tight text-gray-900">Meus Projetos</h2>
+            <h2 className="text-4xl md:text-5xl font-bold tracking-tight text-gray-900">Meus Projetos - ATUALIZADO</h2>
             <p className="mt-4 text-lg text-gray-600 max-w-2xl mx-auto">
               Uma seleção dos meus trabalhos recentes. Sou apaixonado por construir aplicações limpas, eficientes e fáceis de usar.
             </p>
@@ -82,20 +82,24 @@ const Projects: React.FC = () => {
                 <img src={project.image} alt={project.title} className="w-full h-56 object-cover" />
                 <div className="p-6 flex flex-col flex-grow">
                   <h3 className="text-xl font-bold text-gray-900 mb-2">{project.title}</h3>
-                  <p className="text-gray-600 mb-4 flex-grow">{project.description}</p>
-
-                  <div className="mb-6">
-                    <p className="text-red-600 text-sm font-semibold leading-relaxed">
-                      Este sistema pode ser seu! Ele pode ser personalizado e adaptado de acordo com as suas cores, sua logo e suas necessidades.
+                  <div className="bg-red-50 p-4 rounded-lg border border-red-200 mb-4 h-fit">
+                    <p className="text-red-700 text-sm font-bold leading-tight flex items-center gap-2">
+                      <span className="material-symbols-outlined text-base">shopping_cart</span>
+                      ESTE SISTEMA PODE SER SEU!
+                    </p>
+                    <p className="text-red-600 text-xs mt-1 font-medium italic">
+                      Personalize com suas cores, sua logo e suas funcionalidades.
                     </p>
                     <Link
                       to="/contact"
-                      className="mt-3 inline-flex items-center gap-2 text-red-600 font-bold hover:underline text-sm"
+                      className="mt-3 inline-flex items-center gap-2 text-white bg-red-600 px-4 py-2 rounded-md font-bold hover:bg-red-700 text-xs transition-colors shadow-sm"
                     >
-                      <span className="material-symbols-outlined text-base">contact_support</span>
-                      Adquirir este sistema
+                      <span className="material-symbols-outlined text-sm">contact_support</span>
+                      ADQUIRIR AGORA
                     </Link>
                   </div>
+
+                  <p className="text-gray-600 mb-4 flex-grow">{project.description}</p>
 
                   <div className="mt-auto flex items-center justify-between">
                     <a href={project.details_link || "#"} className="font-semibold inline-flex items-center hover:underline" style={{ color: primaryColor }}>
@@ -111,7 +115,7 @@ const Projects: React.FC = () => {
                         style={{ backgroundColor: primaryColor }}
                       >
                         <span className="material-symbols-outlined text-base">open_in_new</span>
-                        Demo
+                        Demo do Sistema
                       </a>
                     )}
                   </div>
