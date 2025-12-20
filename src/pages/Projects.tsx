@@ -81,22 +81,25 @@ const Projects: React.FC = () => {
               <div key={project.id} className="bg-white rounded-xl shadow-lg overflow-hidden flex flex-col group transition-all duration-300 hover:shadow-2xl hover:-translate-y-2">
                 <img src={project.image} alt={project.title} className="w-full h-56 object-cover" />
                 <div className="p-6 flex flex-col flex-grow">
-                  <h3 className="text-xl font-bold text-gray-900 mb-2">{project.title}</h3>
-                  <div className="bg-red-50 p-4 rounded-lg border border-red-200 mb-4 h-fit">
-                    <p className="text-red-700 text-sm font-bold leading-tight flex items-center gap-2">
-                      <span className="material-symbols-outlined text-base">shopping_cart</span>
-                      ESTE SISTEMA PODE SER SEU!
+                  <h3 className="text-xl font-bold text-gray-900 mb-2">
+                    {project.title}
+                    <span className="ml-2 text-red-600 text-sm font-black animate-pulse">[ADQUIRIR]</span>
+                  </h3>
+
+                  <div className="bg-red-600 p-4 rounded-lg mb-4 text-white shadow-lg">
+                    <p className="font-bold text-sm uppercase flex items-center gap-2">
+                      <span className="material-symbols-outlined">shopping_cart</span>
+                      Este sistema pode ser seu!
                     </p>
-                    <p className="text-red-600 text-xs mt-1 font-medium italic">
-                      Personalize com suas cores, sua logo e suas funcionalidades.
+                    <p className="text-xs mt-1 border-t border-red-400 pt-2">
+                      Personalizamos com suas cores e sua logo.
                     </p>
-                    <Link
-                      to="/contact"
-                      className="mt-3 inline-flex items-center gap-2 text-white bg-red-600 px-4 py-2 rounded-md font-bold hover:bg-red-700 text-xs transition-colors shadow-sm"
+                    <a
+                      href="/contact"
+                      className="mt-3 block text-center bg-white text-red-600 py-2 rounded font-black text-sm hover:bg-gray-100 transition-colors"
                     >
-                      <span className="material-symbols-outlined text-sm">contact_support</span>
-                      ADQUIRIR AGORA
-                    </Link>
+                      CLIQUE PARA ADQUIRIR
+                    </a>
                   </div>
 
                   <p className="text-gray-600 mb-4 flex-grow">{project.description}</p>
