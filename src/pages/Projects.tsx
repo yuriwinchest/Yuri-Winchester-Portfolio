@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import { PROJECTS as STATIC_PROJECTS, IMAGES } from '../constants';
@@ -22,7 +23,7 @@ const Projects: React.FC = () => {
       .select('value')
       .eq('key', 'profile_image')
       .single();
-    
+
     if (imgData?.value) setProfileImage(imgData.value);
 
     // 2. Fetch Projects
@@ -37,32 +38,32 @@ const Projects: React.FC = () => {
       setProjects(STATIC_PROJECTS);
     }
   };
-  
+
   return (
     <div className="min-h-screen flex flex-col bg-[#f3f4f6] text-gray-800 font-sans">
       {/* Header Section */}
       <div className="p-8 sm:p-12 pb-0">
-         <div className="max-w-7xl mx-auto flex justify-between items-center">
-            <div className="flex items-center space-x-4">
-                <img 
-                    src={profileImage} 
-                    alt="Yuri" 
-                    className="w-16 h-16 rounded-full object-cover border-2"
-                    style={{ borderColor: primaryColor }}
-                />
-                <div>
-                    <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">Yuri Winchester</h1>
-                    <p className="text-gray-600">Engenheiro de Software & Desenvolvedor Web</p>
-                </div>
+        <div className="max-w-7xl mx-auto flex justify-between items-center">
+          <div className="flex items-center space-x-4">
+            <img
+              src={profileImage}
+              alt="Yuri"
+              className="w-16 h-16 rounded-full object-cover border-2"
+              style={{ borderColor: primaryColor }}
+            />
+            <div>
+              <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">Yuri Winchester</h1>
+              <p className="text-gray-600">Engenheiro de Software & Desenvolvedor Web</p>
             </div>
-            <div className="hidden md:block">
-               <Navbar primaryColor={primaryColor} />
-            </div>
-         </div>
+          </div>
+          <div className="hidden md:block">
+            <Navbar primaryColor={primaryColor} />
+          </div>
+        </div>
       </div>
 
       <div className="md:hidden">
-          <Navbar primaryColor={primaryColor} />
+        <Navbar primaryColor={primaryColor} />
       </div>
 
 
@@ -81,24 +82,37 @@ const Projects: React.FC = () => {
                 <img src={project.image} alt={project.title} className="w-full h-56 object-cover" />
                 <div className="p-6 flex flex-col flex-grow">
                   <h3 className="text-xl font-bold text-gray-900 mb-2">{project.title}</h3>
-                  <p className="text-gray-600 mb-6 flex-grow">{project.description}</p>
-                  
+                  <p className="text-gray-600 mb-4 flex-grow">{project.description}</p>
+
+                  <div className="mb-6">
+                    <p className="text-red-600 text-sm font-semibold leading-relaxed">
+                      Este sistema pode ser seu! Ele pode ser personalizado e adaptado de acordo com as suas cores, sua logo e suas necessidades.
+                    </p>
+                    <Link
+                      to="/contact"
+                      className="mt-3 inline-flex items-center gap-2 text-red-600 font-bold hover:underline text-sm"
+                    >
+                      <span className="material-symbols-outlined text-base">contact_support</span>
+                      Adquirir este sistema
+                    </Link>
+                  </div>
+
                   <div className="mt-auto flex items-center justify-between">
                     <a href={project.details_link || "#"} className="font-semibold inline-flex items-center hover:underline" style={{ color: primaryColor }}>
                       Ver Detalhes
                       <span className="material-symbols-outlined ml-1 text-lg transition-transform group-hover:translate-x-1">arrow_forward</span>
                     </a>
                     {project.live_link && (
-                        <a 
-                        href={project.live_link} 
+                      <a
+                        href={project.live_link}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="text-white py-2 px-4 rounded-md text-sm font-medium transition-colors flex items-center gap-2 hover:opacity-90"
                         style={{ backgroundColor: primaryColor }}
-                        >
+                      >
                         <span className="material-symbols-outlined text-base">open_in_new</span>
                         Demo
-                        </a>
+                      </a>
                     )}
                   </div>
                 </div>
@@ -109,7 +123,7 @@ const Projects: React.FC = () => {
       </main>
 
       <div className="bg-gray-200 border-t border-gray-300 mt-20">
-         <Footer primaryColor={primaryColor} />
+        <Footer primaryColor={primaryColor} />
       </div>
     </div>
   );
